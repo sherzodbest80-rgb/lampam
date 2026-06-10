@@ -11,12 +11,21 @@ interface LeadData {
   source?: string;
 }
 
+// HTML maxsus belgilarini xavfsiz qiladi (< > & buzilmasligi uchun)
+function escapeHtml(text: string): string {
+  if (!text) return "";
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
 export async function POST(req: Request) {
   try {
     const body: LeadData = await req.json();
     const { name, phone, roosters, problem, interestedProduct, source } = body;
 
-    // Validatsiya
+    // --- Validatsiya ---
     if (!name || name.trim().length < 2) {
       return NextResponse.json({ error: "Ism kiritilmagan" }, { status: 400 });
     }
@@ -24,70 +33,65 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Telefon raqami noto'g'ri" }, { status: 400 });
     }
 
-    const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-    const GROUP_ID = process.env.TELEGRAM_GROUP_ID;
+    // --- Env variables ---
+    // .trim() — Vercel'ga nusxalashda kirib qolgan bo'sh joy/yangi qatorni olib tashlaydi
+    const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN?.trim();
+    const GROUP_ID = process.env.TELEGRAM_GROUP_ID?.trim();
 
     if (!BOT_TOKEN || !GROUP_ID) {
-      console.error("Telegram credentials not set");
-      return NextResponse.json({ error: "Server konfiguratsiya xatosi" }, { status: 500 });
+      return NextResponse.json({ error: "Server konfiguratsiya xatosi (env yo'q)" }, { status: 500 });
     }
 
-    // Telegram xabar matni
-    const now = new Date();
-    const dateStr = now.toLocaleString("uz-UZ", {
-      timeZone: "Asia/Tashkent",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
+    // --- Telegram xabar matni (barcha maydonlar escape qilingan) ---
     const text = [
-      "🔔 <b>Yangi lid - LAMPAM Uzbekistan</b>",
+      "🐓 <b>Yangi LAMPAM lid!</b>",
       "",
       `👤 <b>Ism:</b> ${escapeHtml(name)}`,
       `📞 <b>Telefon:</b> ${escapeHtml(phone)}`,
-      roosters ? `🐓 <b>Xo'rozlar:</b> ${escapeHtml(roosters)}` : "",
-      problem ? `❗ <b>Muammo:</b> ${escapeHtml(problem)}` : "",
-      interestedProduct ? `💊 <b>Qiziqdi:</b> ${escapeHtml(interestedProduct)}` : "",
-      "",
-      `🌐 <b>Manba:</b> ${source || "lampam-uzbekistan.uz"}`,
-      `⏰ ${dateStr}`,
-    ]
-      .filter(Boolean)
-      .join("\n");
+      `🐔 <b>Nechta xo'roz:</b> ${escapeHtml(roosters || "—")}`,
+      `❓ <b>Muammo:</b> ${escapeHtml(problem || "—")}`,
+      `📦 <b>Qiziqqan mahsulot:</b> ${escapeHtml(interestedProduct || "—")}`,
+      `🌐 <b>Manba:</b> ${escapeHtml(source || "lampam-uzbekistan.uz")}`,
+    ].join("\n");
 
-    // Telegram API ga yuborish
-    const tgUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-    const tgResponse = await fetch(tgUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: GROUP_ID,
-        text,
-        parse_mode: "HTML",
-        disable_web_page_preview: true,
-      }),
-    });
+    // --- Telegram'ga yuborish ---
+    const tgResponse = await fetch(
+      `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: GROUP_ID,
+          text,
+          parse_mode: "HTML",
+        }),
+      }
+    );
 
-    if (!tgResponse.ok) {
-      const errData = await tgResponse.text();
-      console.error("Telegram error:", errData);
+    // --- MUHIM: Telegram xatosini YASHIRMAYMIZ ---
+    const tgResult = await tgResponse.json();
+
+    if (!tgResponse.ok || !tgResult.ok) {
+      // Aniq xatoni Vercel logiga ham yozamiz
+      console.error("TELEGRAM XATO:", JSON.stringify(tgResult));
+      // VA brauzerga ham qaytaramiz — Network → Response'da ko'rinadi
+      return NextResponse.json(
+        {
+          error: "Telegram'ga yuborilmadi",
+          telegram_error_code: tgResult.error_code,
+          telegram_description: tgResult.description,
+        },
+        { status: 502 }
+      );
     }
 
+    // Hammasi joyida
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error("Lead API error:", err);
-    return NextResponse.json({ error: "Server xatosi" }, { status: 500 });
+    console.error("SERVER XATO:", err);
+    return NextResponse.json(
+      { error: "Server xatosi", detail: String(err) },
+      { status: 500 }
+    );
   }
-}
-
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
 }
