@@ -31,7 +31,8 @@ export default function Footer() {
 
           <div>
             <h4 className="text-white text-xs uppercase tracking-widest mb-4 font-bold">Aloqa</h4>
-            <a href="tel:+998901234567" className="block text-slate-400 no-underline text-sm py-1.5 hover:text-white transition-colors">📞 +998 90 123 45 67</a>
+            <a href="tel:+998500249898" className="block text-slate-400 no-underline text-sm py-1.5 hover:text-white transition-colors">📞 +998 50 024 98 98</a>
+            <a href="tel:+998500248880" className="block text-slate-400 no-underline text-sm py-1.5 hover:text-white transition-colors">📞 +998 50 024 88 80</a>
             <a href="#" className="block text-slate-400 no-underline text-sm py-1.5 hover:text-white transition-colors">📱 Telegram</a>
             <a href="#" className="block text-slate-400 no-underline text-sm py-1.5 hover:text-white transition-colors">📷 Instagram</a>
           </div>
