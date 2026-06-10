@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { getProductBySlug, getSimilarProducts, products } from "@/lib/products";
+import { getProductBySlug, getSimilarProducts, products, formatPrice } from "@/lib/products";
 
 export async function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
@@ -46,6 +46,15 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </span>
           <h1 className="font-display text-4xl md:text-5xl text-lampam-navy font-extrabold mb-2 tracking-tight">{product.name}</h1>
           <span className="inline-block text-lampam-blue bg-blue-50 text-sm font-bold px-3.5 py-1.5 rounded-full mb-4">📦 {product.size}</span>
+          
+          {/* PRICE */}
+          <div className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-5 mb-6 border-2 border-blue-100">
+            <div className="text-xs text-slate-500 uppercase tracking-widest font-bold mb-1.5">Narxi</div>
+            <div className="font-display text-3xl md:text-4xl text-lampam-navy font-extrabold tracking-tight">
+              {formatPrice(product.price)}
+            </div>
+          </div>
+
           <p className="text-lg text-slate-600 mb-6 leading-relaxed">{product.tagline}</p>
 
           <div className="bg-slate-50 rounded-2xl p-6 mb-7">
@@ -61,8 +70,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <Link href={`/forma?product=${encodeURIComponent(product.name)}`} className="flex-1 min-w-[200px] bg-gradient-to-br from-lampam-blue to-lampam-navy text-white px-7 py-4 rounded-2xl font-bold text-base no-underline text-center shadow-xl shadow-lampam-blue/30 hover:-translate-y-1 transition-all flex items-center justify-center gap-2">
               Buyurtma berish →
             </Link>
-            <a href="tel:+998901234567" className="bg-white text-lampam-navy px-7 py-4 border-2 border-slate-200 rounded-2xl font-bold text-base no-underline hover:border-lampam-blue hover:text-lampam-blue transition-all flex items-center gap-2">
-              📞 Qo'ng'iroq
+            <a href="tel:+998500249898" className="bg-white text-lampam-navy px-7 py-4 border-2 border-slate-200 rounded-2xl font-bold text-base no-underline hover:border-lampam-blue hover:text-lampam-blue transition-all flex items-center gap-2">
+              📞 Qo&apos;ng&apos;iroq
             </a>
           </div>
         </div>
@@ -88,7 +97,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <div className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-8 border-2 border-blue-100 mb-6">
               <div className="flex items-center gap-4 mb-5">
                 <div className="w-14 h-14 bg-gradient-to-br from-lampam-green to-emerald-600 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-lampam-green/30">📋</div>
-                <h3 className="font-display text-lampam-navy text-xl font-extrabold">Qanday qo'llash kerak?</h3>
+                <h3 className="font-display text-lampam-navy text-xl font-extrabold">Qanday qo&apos;llash kerak?</h3>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
                 <div className="bg-white rounded-xl p-4 border border-blue-100">
@@ -118,7 +127,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-10">
               <div className="inline-block text-lampam-blue text-xs font-bold tracking-widest mb-3 uppercase">XUDDI SHU KATEGORIYA</div>
-              <h2 className="font-display text-2xl md:text-3xl text-lampam-navy font-extrabold tracking-tight">O'xshash mahsulotlar</h2>
+              <h2 className="font-display text-2xl md:text-3xl text-lampam-navy font-extrabold tracking-tight">O&apos;xshash mahsulotlar</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {similar.map((p) => (
@@ -129,7 +138,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                   <div className="p-5">
                     <span className="inline-block bg-red-50 text-red-700 text-xs font-bold px-3 py-1 rounded-full mb-2.5">{p.categoryEmoji} {p.categoryLabel.toUpperCase()}</span>
                     <h3 className="font-display text-lg text-lampam-navy font-bold mb-1">{p.name}</h3>
-                    <div className="text-slate-500 text-sm mb-3.5 font-medium">{p.size}</div>
+                    <div className="text-slate-500 text-sm mb-2 font-medium">{p.size}</div>
+                    <div className="font-display text-xl text-lampam-navy font-extrabold mb-3">{formatPrice(p.price)}</div>
                     <span className="block bg-lampam-blue text-white py-2.5 rounded-xl text-center font-semibold text-sm">Batafsil →</span>
                   </div>
                 </Link>

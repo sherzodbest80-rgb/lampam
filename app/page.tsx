@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { products } from "@/lib/products";
+import { products, formatPrice } from "@/lib/products";
 
 export default function HomePage() {
   // Scroll reveal
@@ -119,6 +119,9 @@ export default function HomePage() {
                   <h3 className="font-display text-lg text-lampam-navy font-bold mb-1 tracking-tight">{product.name}</h3>
                   <div className="text-slate-500 text-sm mb-3 font-medium">{product.size}</div>
                   <p className="text-slate-600 text-sm mb-4 flex-1 leading-relaxed">{product.shortDesc}</p>
+                  <div className="font-display text-2xl text-lampam-navy font-extrabold mb-3 tracking-tight">
+                    {formatPrice(product.price)}
+                  </div>
                   <span className="bg-lampam-blue text-white py-2.5 rounded-xl text-center font-semibold text-sm group-hover:bg-lampam-navy group-hover:scale-[1.02] transition-all">
                     Batafsil →
                   </span>

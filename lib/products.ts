@@ -5,6 +5,7 @@ export interface Product {
   name: string;
   image: string;
   size: string;
+  price: number;
   category: ProductCategory;
   categoryLabel: string;
   categoryEmoji: string;
@@ -22,12 +23,17 @@ export interface Product {
   badge?: string;
 }
 
+export function formatPrice(price: number): string {
+  return price.toLocaleString("ru-RU").replace(/,/g, " ") + " so'm";
+}
+
 export const products: Product[] = [
   {
     slug: "mega-c-21",
     name: "MEGA C 21",
     image: "/products/MEGA-C-21.png",
     size: "100 tabletka",
+    price: 500000,
     category: "mushak",
     categoryLabel: "Mushak va kuch",
     categoryEmoji: "💪",
@@ -53,7 +59,8 @@ export const products: Product[] = [
     slug: "ibd-292",
     name: "IBD 292",
     image: "/products/IBD-292-50.png",
-    size: "50/100/200 tabletka",
+    size: "100 tabletka",
+    price: 420000,
     category: "mushak",
     categoryLabel: "Mushak va kuch",
     categoryEmoji: "💪",
@@ -71,7 +78,7 @@ export const products: Product[] = [
       amount: "1 tabletka",
       perDay: "1 marta",
       duration: "7–14 kun",
-      note: "Holatga qarab veterinar yoki tajribali parvarishchi bilan maslahat qilinadi.",
+      note: "Holatga qarab veterinar yoki tajribali parvarishchi bilan maslahat qilinadi. 50/200 tabletka variantlari ham mavjud.",
     },
   },
   {
@@ -79,6 +86,7 @@ export const products: Product[] = [
     name: "IBD 4700",
     image: "/products/IBD-4700.png",
     size: "20 tabletka",
+    price: 250000,
     category: "mushak",
     categoryLabel: "Mushak va kuch",
     categoryEmoji: "💪",
@@ -98,6 +106,7 @@ export const products: Product[] = [
     name: "PRO FIGHTER",
     image: "/products/PRO-FIGHTER.png",
     size: "20 kapsula",
+    price: 240000,
     category: "mushak",
     categoryLabel: "Mushak va kuch",
     categoryEmoji: "💪",
@@ -117,6 +126,7 @@ export const products: Product[] = [
     name: "MEGA TENDON TP248",
     image: "/products/MEGA-TENDON-TP248.png",
     size: "50 tabletka",
+    price: 250000,
     category: "oyoq",
     categoryLabel: "Oyoq va tendon",
     categoryEmoji: "🦵",
@@ -142,6 +152,7 @@ export const products: Product[] = [
     name: "SANTOLIN W-D",
     image: "/products/SANTOLIN-W-D-15ml.png",
     size: "15/35/60 ml",
+    price: 230000,
     category: "nafas",
     categoryLabel: "Nafas va energiya",
     categoryEmoji: "🫁",
@@ -159,7 +170,7 @@ export const products: Product[] = [
       amount: "3–5 tomchi",
       perDay: "1 marta",
       duration: "7–14 kun",
-      note: "Og'izga tomiziladi. Kichik flakon varianti uchun qadoq yo'riqnomasini tekshiring.",
+      note: "Og'izga tomiziladi. Hajmga qarab narx farq qiladi — menejer aniq variantni tushuntiradi.",
     },
     badge: "3 HAJM",
   },
@@ -168,6 +179,7 @@ export const products: Product[] = [
     name: "Mega Santolin W-D",
     image: "/products/SANTOLIN-W-D-60ml.png",
     size: "60 ml",
+    price: 485000,
     category: "nafas",
     categoryLabel: "Nafas va energiya",
     categoryEmoji: "🫁",
@@ -193,6 +205,7 @@ export const products: Product[] = [
     name: "LP-OIL",
     image: "/products/LP-OIL.png",
     size: "15 ml",
+    price: 300000,
     category: "parvarish",
     categoryLabel: "Tashqi parvarish",
     categoryEmoji: "🛡️",
@@ -218,6 +231,7 @@ export const products: Product[] = [
     name: "FR 506",
     image: "/products/FR-506.png",
     size: "50 tabletka",
+    price: 250000,
     category: "parvarish",
     categoryLabel: "Tashqi parvarish",
     categoryEmoji: "🛡️",
