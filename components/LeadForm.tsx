@@ -43,11 +43,31 @@ export default function LeadForm() {
       return;
     }
 
-    // HOZIRCHA: faqat /thanks ga o'tkazadi
-    // KEYIN: bu yerda AmoCRM + Meta CAPI + Telegram chaqiriladi
-    setTimeout(() => {
+    try {
+      const response = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          phone: phone.trim(),
+          roosters: roosters.trim(),
+          problem: problem.trim(),
+          interestedProduct: interestedProduct.trim(),
+          source: "lampam-uzbekistan.uz",
+        }),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.error || "Xatolik yuz berdi");
+      }
+
+      // Muvaffaqiyatli yuborildi — /thanks ga o'tkazamiz
       window.location.href = "/thanks";
-    }, 500);
+    } catch (err) {
+      setStatus("error");
+      setErrorMsg(err instanceof Error ? err.message : "Xatolik yuz berdi. Qaytadan urinib ko'ring");
+    }
   };
 
   return (
@@ -62,9 +82,9 @@ export default function LeadForm() {
             🇹🇭 THAILAND ASLI MAHSULOTLAR
           </div>
           <h1 className="font-display text-3xl md:text-4xl font-extrabold leading-tight mb-2.5 tracking-tight">
-            Xo'rozingiz uchun <span className="bg-gradient-to-br from-lampam-green-light to-lampam-green bg-clip-text text-transparent">professional yechim</span>
+            Xo&apos;rozingiz uchun <span className="bg-gradient-to-br from-lampam-green-light to-lampam-green bg-clip-text text-transparent">professional yechim</span>
           </h1>
-          <p className="text-base opacity-90">Formani to'ldiring, biz tez orada bog'lanamiz</p>
+          <p className="text-base opacity-90">Formani to&apos;ldiring, biz tez orada bog&apos;lanamiz</p>
         </div>
 
         <div className="bg-white rounded-3xl p-8 shadow-2xl shadow-black/30">
@@ -78,7 +98,7 @@ export default function LeadForm() {
             <div className="bg-gradient-to-br from-blue-50 to-sky-50 border-l-4 border-lampam-blue rounded-lg p-3 mb-5 flex gap-2.5 items-start">
               <span className="text-lg flex-shrink-0">ℹ️</span>
               <p className="text-lampam-navy text-xs leading-relaxed m-0">
-                Ushbu formani diqqat bilan to'ldiring va menejerlarimiz siz bilan bog'lanib ma'lumot berishadi
+                Ushbu formani diqqat bilan to&apos;ldiring va menejerlarimiz siz bilan bog&apos;lanib ma&apos;lumot berishadi
               </p>
             </div>
 
@@ -93,7 +113,7 @@ export default function LeadForm() {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-bold text-lampam-navy mb-2">Nechta xo'rozlaringiz bor?</label>
+              <label className="block text-sm font-bold text-lampam-navy mb-2">Nechta xo&apos;rozlaringiz bor?</label>
               <input type="text" value={roosters} onChange={(e) => setRoosters(e.target.value)} placeholder="Masalan: 5 ta, 20 ga yaqin, ko'p" disabled={status === "loading"} className="w-full px-4 py-3.5 border-2 border-slate-200 rounded-xl text-sm bg-slate-50 text-slate-800 focus:outline-none focus:border-lampam-blue focus:bg-white focus:ring-4 focus:ring-lampam-blue/10 transition-all disabled:opacity-60" />
             </div>
 
@@ -103,7 +123,7 @@ export default function LeadForm() {
             </div>
 
             <div className="mb-5">
-              <label className="block text-sm font-bold text-lampam-navy mb-2">Qaysi mahsulotimiz qiziq bo'ldi?</label>
+              <label className="block text-sm font-bold text-lampam-navy mb-2">Qaysi mahsulotimiz qiziq bo&apos;ldi?</label>
               <input type="text" value={interestedProduct} onChange={(e) => setInterestedProduct(e.target.value)} placeholder="Masalan: MEGA C 21, IBD 292 yoki bilmayman" disabled={status === "loading"} className="w-full px-4 py-3.5 border-2 border-slate-200 rounded-xl text-sm bg-slate-50 text-slate-800 focus:outline-none focus:border-lampam-blue focus:bg-white focus:ring-4 focus:ring-lampam-blue/10 transition-all disabled:opacity-60" />
             </div>
 
