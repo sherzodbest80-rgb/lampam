@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "LAMPAM Uzbekistan - Xo'roz vitaminlari",
+  title: "ROOST Uzbekistan - Xo'roz vitaminlari",
   description: "Thailand №1 xo'roz vitaminlari brendining O'zbekistondagi rasmiy importchisi. Butun O'zbekiston bo'ylab BEPUL yetkazib berish.",
 };
 
