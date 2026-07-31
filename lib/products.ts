@@ -118,7 +118,7 @@ export const products: Product[] = [
       { text: "<strong>Belgian</strong> ishlab chiqaruvchisi" },
       { text: "<strong>20 kapsula</strong> qulay qadoqda" },
     ],
-    benefits: "Nomlanishi va Lampam liniyasidagi o'rniga ko'ra jang/mashq oldi faolligi, quvvat va jangovar holatni qo'llab-quvvatlash mahsuloti sifatida pozitsiyalanadi.",
+    benefits: "Nomlanishi va Roost liniyasidagi o'rniga ko'ra jang/mashq oldi faolligi, quvvat va jangovar holatni qo'llab-quvvatlash mahsuloti sifatida pozitsiyalanadi.",
     problems: "Sustlik, tayyorgarlik davrida quvvat yetishmasligi, aktivlik pastligi.",
   },
   {
@@ -235,15 +235,15 @@ export const products: Product[] = [
     category: "parvarish",
     categoryLabel: "Tashqi parvarish",
     categoryEmoji: "🛡️",
-    shortDesc: "LAMPAM parvarish liniyasidagi mahsulot. Tavsifi menejer orqali.",
-    tagline: "LAMPAM parvarish liniyasidagi mahsulot. Batafsil ma'lumot menejer orqali beriladi.",
+    shortDesc: "ROOST parvarish liniyasidagi mahsulot. Tavsifi menejer orqali.",
+    tagline: "ROOST parvarish liniyasidagi mahsulot. Batafsil ma'lumot menejer orqali beriladi.",
     highlights: [
-      { text: "<strong>LAMPAM</strong> parvarish liniyasi" },
+      { text: "<strong>ROOST</strong> parvarish liniyasi" },
       { text: "<strong>Mushak qo'llab-quvvatlash</strong>" },
       { text: "<strong>Energiya</strong> qo'shilishi" },
       { text: "<strong>50 tabletka</strong> qulay qadoq" },
     ],
-    benefits: "FR 506 bo'yicha aniq tavsif menejer orqali tushuntiriladi. Lampam setlarida boshqa tayyorgarlik/parvarish mahsulotlari bilan birga uchraydi.",
+    benefits: "FR 506 bo'yicha aniq tavsif menejer orqali tushuntiriladi. Roost setlarida boshqa tayyorgarlik/parvarish mahsulotlari bilan birga uchraydi.",
     problems: "Aniq muammo/yechim menejer orqali tushuntiriladi. Umumiy parvarish va tayyorgarlik liniyasi sifatida ehtiyotkor joylashtiriladi.",
   },
 ];
