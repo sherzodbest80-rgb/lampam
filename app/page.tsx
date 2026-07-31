@@ -53,7 +53,7 @@ export default function HomePage() {
           </h1>
 
           <p className="text-sm md:text-lg opacity-90 mb-6 md:mb-9 max-w-xl mx-auto opacity-0 translate-y-8" style={{ animation: "fadeInUp 0.8s 0.3s ease-out forwards" }}>
-            Original LAMPAM mahsulotlari — xo&apos;rozingizning kuchi, salomatligi va chidamliligi uchun professional yechim
+            Original ROOST mahsulotlari — xo&apos;rozingizning kuchi, salomatligi va chidamliligi uchun professional yechim
           </p>
 
           <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-6 md:mb-10 opacity-0 translate-y-8" style={{ animation: "fadeInUp 0.8s 0.4s ease-out forwards" }}>
@@ -137,12 +137,12 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <div className="inline-block text-lampam-blue text-xs font-bold tracking-widest mb-3 uppercase">USTUNLIKLAR</div>
-            <h2 className="font-display text-3xl md:text-4xl text-lampam-navy font-extrabold mb-3 tracking-tight">Nega LAMPAM Uzbekistan?</h2>
+            <h2 className="font-display text-3xl md:text-4xl text-lampam-navy font-extrabold mb-3 tracking-tight">Nega ROOST Uzbekistan?</h2>
             <p className="text-slate-500 text-base">Sizning xo&apos;rozingiz uchun eng yaxshisi</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: "🇹🇭", title: "Thailanddan original", desc: "LAMPAM brendining O'zbekistondagi rasmiy importchisi" },
+              { icon: "🇹🇭", title: "Thailanddan original", desc: "ROOST brendining O'zbekistondagi rasmiy importchisi" },
               { icon: "🚚", title: "Bepul yetkazib berish", desc: "Butun O'zbekiston bo'ylab — qishloqlarga ham yetkaziladi" },
               { icon: "👨‍⚕️", title: "Professional maslahat", desc: "Tajribali menejerlar har bir mahsulot bo'yicha tushuntiradi" },
               { icon: "🔒", title: "Sifat kafolati", desc: "Faqat original mahsulotlar, soxta yo'q" },
