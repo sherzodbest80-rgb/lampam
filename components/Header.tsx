@@ -11,7 +11,7 @@ export default function Header() {
             🐓
           </div>
           <div className="leading-tight">
-            <div className="text-lg tracking-wide">LAMPAM</div>
+            <div className="text-lg tracking-wide">ROOST</div>
             <div className="text-[10px] text-slate-500 font-medium tracking-widest">UZBEKISTAN</div>
           </div>
         </Link>
