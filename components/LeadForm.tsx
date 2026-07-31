@@ -53,7 +53,7 @@ export default function LeadForm() {
           roosters: roosters.trim(),
           problem: problem.trim(),
           interestedProduct: interestedProduct.trim(),
-          source: "lampam-uzbekistan.uz",
+          source: "roost-uzbekistan.uz",
         }),
       });
 
