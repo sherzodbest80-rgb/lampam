@@ -44,14 +44,14 @@ export async function POST(req: Request) {
 
     // --- Telegram xabar matni (barcha maydonlar escape qilingan) ---
     const text = [
-      "🐓 <b>Yangi LAMPAM lid!</b>",
+      "🐓 <b>Yangi ROOST lid!</b>",
       "",
       `👤 <b>Ism:</b> ${escapeHtml(name)}`,
       `📞 <b>Telefon:</b> ${escapeHtml(phone)}`,
       `🐔 <b>Nechta xo'roz:</b> ${escapeHtml(roosters || "—")}`,
       `❓ <b>Muammo:</b> ${escapeHtml(problem || "—")}`,
       `📦 <b>Qiziqqan mahsulot:</b> ${escapeHtml(interestedProduct || "—")}`,
-      `🌐 <b>Manba:</b> ${escapeHtml(source || "lampam-uzbekistan.uz")}`,
+      `🌐 <b>Manba:</b> ${escapeHtml(source || "roost-uzbekistan.uz")}`,
     ].join("\n");
 
     // --- Telegram'ga yuborish ---
