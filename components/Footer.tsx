@@ -39,7 +39,7 @@ export default function Footer() {
         </div>
 
         <div className="text-center pt-6 text-xs">
-          © 2026 LAMPAM Uzbekistan. Barcha huquqlar himoyalangan.
+          © 2026 ROOST Uzbekistan. Barcha huquqlar himoyalangan.
         </div>
       </div>
     </footer>
