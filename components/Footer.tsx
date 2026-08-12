@@ -18,7 +18,7 @@ export default function Footer() {
               </div>
             </Link>
             <p className="text-sm max-w-xs leading-relaxed">
-              Thailand №1 xo'roz vitaminlari brendining O'zbekistondagi rasmiy importchisi.
+              №1 xo'roz vitaminlari brendining O'zbekistondagi rasmiy importchisi.
             </p>
           </div>
 
