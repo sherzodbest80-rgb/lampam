@@ -6,15 +6,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 bg-white/85 backdrop-blur-xl border-b border-slate-200/60 z-50">
       <div className="max-w-7xl mx-auto px-5 py-3.5 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2.5 font-display font-extrabold text-lampam-navy hover:scale-[1.02] transition-transform">
-          <div className="w-10 h-10 bg-gradient-to-br from-lampam-blue to-lampam-navy rounded-xl flex items-center justify-center text-2xl shadow-lg shadow-lampam-blue/30">
-            🐓
-          </div>
-          <div className="leading-tight">
-            <div className="text-lg tracking-wide">ROOST</div>
-            <div className="text-[10px] text-slate-500 font-medium tracking-widest">UZBEKISTAN</div>
-          </div>
-        </Link>
+                <Link href="/" className="flex items-center gap-2.5 hover:scale-[1.02] transition-transform"><img src="/logo.png" alt="ROOST Premium" className="h-10 w-auto" /></Link>
 
         <a
          href="tel:+998500249898"
