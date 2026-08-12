@@ -34,7 +34,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <div className="relative bg-white rounded-3xl border border-slate-200 h-[500px] flex items-center justify-center p-10 overflow-hidden shadow-xl shadow-lampam-navy/5">
           <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[radial-gradient(circle,rgba(0,102,179,0.05)_0%,transparent_70%)]" />
           <div className="absolute top-5 left-5 flex flex-col gap-2 z-10">
-            <span className="bg-gradient-to-br from-red-500 to-red-700 text-white px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wider">🇹🇭 THAILAND</span>
             <span className="bg-gradient-to-br from-lampam-green to-emerald-600 text-white px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wider">✓ ORIGINAL</span>
           </div>
           <Image src={product.image} alt={product.name} width={400} height={400} className="max-w-full max-h-full object-contain animate-float-y relative z-1" />
