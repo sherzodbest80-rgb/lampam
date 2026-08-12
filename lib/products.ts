@@ -57,7 +57,7 @@ export const products: Product[] = [
   },
   {
     slug: "ibd-292",
-    name: "IBD 292",
+      name: "ABD 292",
     image: "/products/IBD-292-50.png",
     size: "100 tabletka",
     price: 420000,
