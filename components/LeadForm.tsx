@@ -79,7 +79,7 @@ export default function LeadForm() {
         <div className="text-center text-white mb-7">
           <div className="inline-flex items-center gap-2 bg-lampam-green/20 text-lampam-green-light px-4 py-2 rounded-full text-xs font-bold tracking-wider mb-4 border border-lampam-green/40 backdrop-blur-sm">
             <span className="w-1.5 h-1.5 bg-lampam-green-light rounded-full animate-pulse-dot" />
-            🇹🇭 THAILAND ASLI MAHSULOTLAR
+            ASLI MAHSULOTLAR
           </div>
           <h1 className="font-display text-3xl md:text-4xl font-extrabold leading-tight mb-2.5 tracking-tight">
             Xo&apos;rozingiz uchun <span className="bg-gradient-to-br from-lampam-green-light to-lampam-green bg-clip-text text-transparent">professional yechim</span>
