@@ -44,11 +44,11 @@ export default function HomePage() {
         <div className="max-w-3xl mx-auto text-center relative z-10">
           <div className="inline-flex items-center gap-2 bg-lampam-green/20 text-lampam-green-light px-4 py-2 rounded-full text-xs font-bold tracking-wider mb-4 md:mb-7 border border-lampam-green/40 backdrop-blur-sm opacity-0 translate-y-8 transition-all duration-700" style={{ animation: "fadeInUp 0.8s 0.1s ease-out forwards" }}>
             <span className="w-2 h-2 bg-lampam-green-light rounded-full animate-pulse-dot" />
-            🇹🇭 THAILAND ASLI MAHSULOTLAR
+            ASLI MAHSULOTLAR
           </div>
 
           <h1 className="font-display text-2xl sm:text-3xl md:text-5xl font-extrabold leading-tight mb-4 tracking-tight opacity-0 translate-y-8" style={{ animation: "fadeInUp 0.8s 0.2s ease-out forwards" }}>
-            Thailand <span className="bg-gradient-to-br from-lampam-green-light to-lampam-green bg-clip-text text-transparent">№1</span> xo&apos;roz vitaminlari
+            <span className="bg-gradient-to-br from-lampam-green-light to-lampam-green bg-clip-text text-transparent">№1</span> xo&apos;roz vitaminlari
             <br />endi O&apos;zbekistonda
           </h1>
 
@@ -57,7 +57,7 @@ export default function HomePage() {
           </p>
 
           <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-6 md:mb-10 opacity-0 translate-y-8" style={{ animation: "fadeInUp 0.8s 0.4s ease-out forwards" }}>
-            {["Original Thailand", "BEPUL yetkazib berish", "Professional maslahat"].map((feat) => (
+            {["Original", "BEPUL yetkazib berish", "Professional maslahat"].map((feat) => (
               <div key={feat} className="flex items-center gap-2 bg-white/10 px-3 md:px-5 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-semibold backdrop-blur-sm border border-white/20 hover:bg-white/15 hover:-translate-y-0.5 transition-all">
                 <span className="text-lampam-green-light font-extrabold">✓</span> {feat}
               </div>
@@ -142,7 +142,7 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: "🇹🇭", title: "Thailanddan original", desc: "ROOST brendining O'zbekistondagi rasmiy importchisi" },
+              { icon: "✅", title: "100% original", desc: "ROOST brendining O'zbekistondagi rasmiy importchisi" },
               { icon: "🚚", title: "Bepul yetkazib berish", desc: "Butun O'zbekiston bo'ylab — qishloqlarga ham yetkaziladi" },
               { icon: "👨‍⚕️", title: "Professional maslahat", desc: "Tajribali menejerlar har bir mahsulot bo'yicha tushuntiradi" },
               { icon: "🔒", title: "Sifat kafolati", desc: "Faqat original mahsulotlar, soxta yo'q" },
