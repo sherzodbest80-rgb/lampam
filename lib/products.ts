@@ -30,7 +30,7 @@ export function formatPrice(price: number): string {
 export const products: Product[] = [
   {
     slug: "mega-c-21",
-    name: "MEGA C 21",
+    name: "MAX C 21",
     image: "/products/MEGA-C-21.png",
     size: "100 tabletka",
     price: 500000,
@@ -83,7 +83,7 @@ export const products: Product[] = [
   },
   {
     slug: "ibd-4700",
-    name: "IBD 4700",
+    name: "MAX 4700",
     image: "/products/IBD-4700.png",
     size: "20 tabletka",
     price: 250000,
@@ -103,7 +103,7 @@ export const products: Product[] = [
   },
   {
     slug: "pro-fighter",
-    name: "PRO FIGHTER",
+    name: "MAX FIGHTER",
     image: "/products/PRO-FIGHTER.png",
     size: "20 kapsula",
     price: 240000,
@@ -123,7 +123,7 @@ export const products: Product[] = [
   },
   {
     slug: "mega-tendon-tp248",
-    name: "MEGA TENDON TP248",
+    name: "MAX TP248",
     image: "/products/MEGA-TENDON-TP248.png",
     size: "50 tabletka",
     price: 250000,
@@ -149,7 +149,7 @@ export const products: Product[] = [
   },
   {
     slug: "santolin-w-d",
-    name: "SANTOLIN W-D",
+    name: "MAX W-D",
     image: "/products/SANTOLIN-W-D-15ml.png",
     size: "15/35/60 ml",
     price: 230000,
@@ -176,7 +176,7 @@ export const products: Product[] = [
   },
   {
     slug: "mega-santolin-w-d",
-    name: "Mega Santolin W-D",
+    name: "Mega Max W-D",
     image: "/products/SANTOLIN-W-D-60ml.png",
     size: "60 ml",
     price: 485000,
@@ -202,7 +202,7 @@ export const products: Product[] = [
   },
   {
     slug: "lp-oil",
-    name: "LP-OIL",
+    name: "MAX-OIL",
     image: "/products/LP-OIL.png",
     size: "15 ml",
     price: 300000,
