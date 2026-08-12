@@ -124,7 +124,7 @@ export default function LeadForm() {
 
             <div className="mb-5">
               <label className="block text-sm font-bold text-lampam-navy mb-2">Qaysi mahsulotimiz qiziq bo&apos;ldi?</label>
-              <input type="text" value={interestedProduct} onChange={(e) => setInterestedProduct(e.target.value)} placeholder="Masalan: MEGA C 21, ABD 292 yoki bilmayman" disabled={status === "loading"} className="w-full px-4 py-3.5 border-2 border-slate-200 rounded-xl text-sm bg-slate-50 text-slate-800 focus:outline-none focus:border-lampam-blue focus:bg-white focus:ring-4 focus:ring-lampam-blue/10 transition-all disabled:opacity-60" />
+              <input type="text" value={interestedProduct} onChange={(e) => setInterestedProduct(e.target.value)} placeholder="Masalan: MAX C 21, ABD 292 yoki bilmayman" disabled={status === "loading"} className="w-full px-4 py-3.5 border-2 border-slate-200 rounded-xl text-sm bg-slate-50 text-slate-800 focus:outline-none focus:border-lampam-blue focus:bg-white focus:ring-4 focus:ring-lampam-blue/10 transition-all disabled:opacity-60" />
             </div>
 
             {status === "error" && errorMsg && (
