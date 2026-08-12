@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "ROOST Uzbekistan - Xo'roz vitaminlari",
-  description: "Thailand №1 xo'roz vitaminlari brendining O'zbekistondagi rasmiy importchisi. Butun O'zbekiston bo'ylab BEPUL yetkazib berish.",
+  description: "№1 xo'roz vitaminlari brendining O'zbekistondagi rasmiy importchisi. Butun O'zbekiston bo'ylab BEPUL yetkazib berish.",
 };
 
 export default function RootLayout({
