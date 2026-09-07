@@ -44,6 +44,21 @@ export default function LeadForm() {
     }
 
     try {
+      // Meta match uchun cookie'lar va dedup event_id
+      const getCookie = (n: string) =>
+        document.cookie
+          .split("; ")
+          .find((row) => row.startsWith(n + "="))
+          ?.split("=")[1] || "";
+      const fbp = getCookie("_fbp");
+      const fbc = getCookie("_fbc");
+      const eventId = `lead_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+
+      // Pixel'ga Lead eventi (server CAPI bilan bir xil event_id — deduplikatsiya)
+      if (typeof window !== "undefined" && (window as any).fbq) {
+        (window as any).fbq("track", "Lead", {}, { eventID: eventId });
+      }
+
       const response = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -54,6 +69,11 @@ export default function LeadForm() {
           problem: problem.trim(),
           interestedProduct: interestedProduct.trim(),
           source: "roost-uzbekistan.uz",
+          fbp,
+          fbc,
+          userAgent: navigator.userAgent,
+          pageUrl: window.location.href,
+          event_id: eventId,
         }),
       });
 
