@@ -69,7 +69,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <Link href={`/forma?product=${encodeURIComponent(product.name)}`} className="flex-1 min-w-[200px] bg-gradient-to-br from-lampam-blue to-lampam-navy text-white px-7 py-4 rounded-2xl font-bold text-base no-underline text-center shadow-xl shadow-lampam-blue/30 hover:-translate-y-1 transition-all flex items-center justify-center gap-2">
               Buyurtma berish →
             </Link>
-            <a href="tel:+998500249898" className="bg-white text-lampam-navy px-7 py-4 border-2 border-slate-200 rounded-2xl font-bold text-base no-underline hover:border-lampam-blue hover:text-lampam-blue transition-all flex items-center gap-2">
+            <a href="tel:+998998477349" className="bg-white text-lampam-navy px-7 py-4 border-2 border-slate-200 rounded-2xl font-bold text-base no-underline hover:border-lampam-blue hover:text-lampam-blue transition-all flex items-center gap-2">
               📞 Qo&apos;ng&apos;iroq
             </a>
           </div>

@@ -9,10 +9,10 @@ export default function Header() {
                 <Link href="/" className="flex items-center gap-2.5 hover:scale-[1.02] transition-transform"><img src="/logo.png" alt="ROOST Premium" className="h-10 w-auto" /></Link>
 
         <a
-         href="tel:+998500249898"
+         href="tel:+998998477349"
           className="text-lampam-blue font-bold no-underline text-sm flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-blue-50 hover:bg-blue-100 hover:-translate-y-0.5 transition-all"
         >
-          📞 <span className="hidden sm:inline">+998 50 024 98 98</span>
+          📞 <span className="hidden sm:inline">+998 99 847 73 49</span>
         </a>
       </div>
     </header>
