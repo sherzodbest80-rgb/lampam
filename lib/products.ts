@@ -325,6 +325,33 @@ export const products: Product[] = [
       note: "Aniq doza qadoq yo'riqnomasi bilan tasdiqlanadi. Menejer bilan maslahat qilinadi.",
     },
   },
+  {
+    slug: "mega-vip-123",
+    name: "MEGA VIP.123",
+    image: "/products/MEGA-VIP-123.png",
+    size: "12 ml",
+    price: 700000,
+    category: "nafas",
+    categoryLabel: "Nafas va energiya",
+    categoryEmoji: "🫁",
+    shortDesc: "Tez so'riladigan energiya tomchisi. Faollik va tetiklikni darhol qo'llab-quvvatlaydi.",
+    tagline: "\"High Energy\" — tez ta'sir qiluvchi energiya tomchisi. Faollik, tetiklik va chidamlilikni qo'llab-quvvatlash uchun.",
+    highlights: [
+      { text: "<strong>Tez ta'sir</strong> qiluvchi energiya" },
+      { text: "<strong>Faollik va tetiklik</strong> uchun" },
+      { text: "<strong>Chidamlilik</strong>ni qo'llab-quvvatlaydi" },
+      { text: "<strong>Qulay tomchi</strong> shakli — 12 ml" },
+    ],
+    benefits: "Tez so'riladigan energiya manbai sifatida faollik, tetiklik va chidamlilikni qo'llab-quvvatlash uchun pozitsiyalanadi. Tomchi shakli tufayli qulay va tejamli ishlatiladi.",
+    problems: "Sustlik, tez toliqish, energiya pastligi, faollik yetishmasligi — ayniqsa faol davrlarda quvvatni tez ko'tarish ehtiyoji uchun.",
+    usage: {
+      amount: "1–3 tomchi",
+      perDay: "1 marta",
+      duration: "Ehtiyojga qarab",
+      note: "Og'izga yoki suvga tomiziladi. Aniq doza qadoq yo'riqnomasi bilan tasdiqlanadi. Menejer bilan maslahat qilinadi.",
+    },
+    badge: "YANGI",
+  },
 ];
 
 export function getProductBySlug(slug: string): Product | undefined {
