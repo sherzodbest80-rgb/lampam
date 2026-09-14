@@ -379,6 +379,33 @@ export const products: Product[] = [
     },
     badge: "YANGI",
   },
+  {
+    slug: "super-power",
+    name: "SUPER POWER",
+    image: "/products/SUPER-POWER.png",
+    size: "10 ml",
+    price: 1350000,
+    category: "nafas",
+    categoryLabel: "Nafas va energiya",
+    categoryEmoji: "🫁",
+    shortDesc: "Kuchli quvvat va energiya uchun konsentratsiyalangan flakon. Zaxira yog'ni energiyaga aylantirishga yo'naltirilgan formula.",
+    tagline: "SUPER POWER — parrandaning quvvati, faolligi va chidamliligini yuqori darajada qo'llab-quvvatlash uchun konsentratsiyalangan formula. 10 ml flakon.",
+    highlights: [
+      { text: "<strong>Yuqori quvvat</strong> va energiya uchun" },
+      { text: "<strong>Zaxira yog'ni energiyaga</strong> aylantirishga yo'naltirilgan" },
+      { text: "<strong>Faollik va chidamlilik</strong>ni qo'llab-quvvatlaydi" },
+      { text: "<strong>Konsentratsiyalangan</strong> 10 ml flakon" },
+    ],
+    benefits: "Parrandaning quvvati, faolligi va chidamliligini kuchli darajada qo'llab-quvvatlash uchun pozitsiyalanadi. Formula zaxira yog'ni energiyaga aylantirishga yo'naltirilgan bo'lib, ayniqsa faol davrlarda quvvat ehtiyoji yuqori bo'lganda ishlatiladi. Konsentratsiyalangan 10 ml flakon shaklida.",
+    problems: "Quvvat va energiya yetishmasligi, tez charchash, faollik va chidamlilik pastligi — parrandani yuqori faollik davriga tayyorlashda qo'shimcha quvvat ehtiyoji uchun.",
+    usage: {
+      amount: "Yo'riqnomaga muvofiq",
+      perDay: "Ehtiyojga qarab",
+      duration: "Faol davrda",
+      note: "Konsentratsiyalangan flakon. Aniq doza va qo'llash tartibi qadoq yo'riqnomasi bilan belgilanadi. Menejer bilan maslahatlashib ishlatiladi.",
+    },
+    badge: "YANGI",
+  },
 ];
 
 export function getProductBySlug(slug: string): Product | undefined {
