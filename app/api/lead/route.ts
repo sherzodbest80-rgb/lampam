@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
+import { findRecentLeadByPhone } from "@/lib/amocrm-dedup";
 
 export const runtime = "nodejs";
 
@@ -23,6 +24,7 @@ function escapeHtml(text: string): string {
   if (!text) return "";
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
+
 
 export async function POST(req: Request) {
   try {
@@ -284,6 +286,34 @@ async function createAmoCRMLead(data: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${ACCESS_TOKEN}`,
   };
+
+  // --- DUBLIKAT TEKSHIRUVI ---
+  // Shu telefon so'nggi 24 soatda "Воронка"da bormi? Bo'lsa yangi lid ochmaymiz,
+  // faqat mavjud lidga izoh qo'shamiz (sayt + FB retry + ikki manba — hammasini qamraydi).
+  const existing = await findRecentLeadByPhone(baseUrl, headers, data.phone, PIPELINE_ID);
+  if (existing?.leadId) {
+    console.log(`[AMOCRM DEDUP] Dublikat aniqlandi — telefon ${data.phone}, mavjud lead ${existing.leadId}`);
+    if (data.comment) {
+      try {
+        const noteText = [
+          `♻️ Takroriy murojaat (sayt formasi)`,
+          `Mijoz: ${data.name}`,
+          `Telefon: ${data.phone}`,
+          `\n${data.comment}`,
+        ]
+          .filter(Boolean)
+          .join("\n");
+        await fetch(`${baseUrl}/api/v4/leads/${existing.leadId}/notes`, {
+          method: "POST",
+          headers,
+          body: JSON.stringify([{ note_type: "common", params: { text: noteText } }]),
+        });
+      } catch (err) {
+        console.warn("[AMOCRM DEDUP] Izoh qo'shishda xatolik:", err);
+      }
+    }
+    return { leadId: existing.leadId, contactId: existing.contactId, duplicate: true };
+  }
 
   const contactCustomFields: any[] = [
     { field_code: "PHONE", values: [{ value: data.phone, enum_code: "WORK" }] },

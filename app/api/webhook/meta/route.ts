@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import { findRecentLeadByPhone } from "@/lib/amocrm-dedup";
 
 export const runtime = "nodejs";
+
+// Meta bitta leadgen'ni bir necha marta yuboradi (retry). Shu instans ichida
+// qayta ishlangan leadgen_id larni eslab qolamiz — bir leadgen faqat bir marta.
+const processedLeadgen = new Set<string>();
 
 /**
  * Meta webhook (Facebook Lead Ads) — Roost
@@ -52,6 +57,13 @@ async function handleLeadgenEvent(value: any) {
   const { leadgen_id, form_id, ad_id, campaign_id } = value;
   console.log("[ROOST LEADGEN] New lead:", leadgen_id);
 
+  // 1-qalqon: shu leadgen_id shu instansda allaqachon ishlanganmi? (Meta retry)
+  if (leadgen_id && processedLeadgen.has(String(leadgen_id))) {
+    console.log(`[ROOST LEADGEN DEDUP] ${leadgen_id} allaqachon ishlangan — o'tkazib yuborildi`);
+    return;
+  }
+  if (leadgen_id) processedLeadgen.add(String(leadgen_id));
+
   try {
     const leadRes = await fetch(
       `https://graph.facebook.com/v21.0/${leadgen_id}?access_token=${process.env.META_ACCESS_TOKEN}`
@@ -102,6 +114,31 @@ async function createAmoLeadFromLeadAds(data: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${ACCESS_TOKEN}`,
   };
+
+  // 2-qalqon: shu telefon so'nggi 24 soatda "Воронка"da bormi? (sayt + FB retry)
+  const existing = await findRecentLeadByPhone(baseUrl, headers, data.phone, PIPELINE_ID);
+  if (existing?.leadId) {
+    console.log(
+      `[ROOST LEADGEN DEDUP] Telefon ${data.phone} uchun mavjud lead ${existing.leadId} — yangi ochilmadi`
+    );
+    try {
+      await fetch(`${baseUrl}/api/v4/leads/${existing.leadId}/notes`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify([
+          {
+            note_type: "common",
+            params: {
+              text: `♻️ Takroriy murojaat (Facebook Lead Ads)\nMijoz: ${data.name}\nTelefon: ${data.phone}\nleadgen_id: ${data.leadgenId}`,
+            },
+          },
+        ]),
+      });
+    } catch {
+      /* izoh muhim emas */
+    }
+    return;
+  }
 
   const unsortedPayload = [
     {
