@@ -352,6 +352,33 @@ export const products: Product[] = [
     },
     badge: "YANGI",
   },
+  {
+    slug: "mega-super-2008",
+    name: "MEGA SUPER 2008",
+    image: "/products/MEGA-SUPER-2008.png",
+    size: "45 ml",
+    price: 870000,
+    category: "mushak",
+    categoryLabel: "Mushak va kuch",
+    categoryEmoji: "💪",
+    shortDesc: "\"High Muscle Energy\" — mushak energiyasi, kuch va chidamlilik uchun kuchli tomchi. Katta 45 ml hajm.",
+    tagline: "\"High Muscle Energy\" — mushaklarga energiya, kuch va chidamlilikni qo'llab-quvvatlovchi yuqori quvvatli tomchi. Katta 45 ml hajm kursga qulay.",
+    highlights: [
+      { text: "<strong>Mushak energiyasi</strong> va kuch uchun" },
+      { text: "<strong>Chidamlilik</strong> va bardoshlilikni qo'llab-quvvatlaydi" },
+      { text: "<strong>Yuqori quvvat</strong> — kuchli formula" },
+      { text: "<strong>Katta 45 ml</strong> hajm — kursga tejamli" },
+    ],
+    benefits: "Mushaklarga energiya berish, kuch va chidamlilikni qo'llab-quvvatlash uchun pozitsiyalanadi. Yuqori quvvatli formula bo'lgani uchun faol davrlarda ishlatiladi. 45 ml katta hajmi uzoq kurs yoki bir nechta parranda uchun qulay.",
+    problems: "Mushak zaifligi, tez toliqish, kuch va energiya yetishmasligi, chidamlilik pastligi — ayniqsa faol davrlarda quvvatni oshirish ehtiyoji uchun.",
+    usage: {
+      amount: "1–3 tomchi",
+      perDay: "1 marta",
+      duration: "Ehtiyojga qarab",
+      note: "Og'izga yoki suvga tomiziladi. Aniq doza qadoq yo'riqnomasi bilan tasdiqlanadi. Menejer bilan maslahat qilinadi.",
+    },
+    badge: "YANGI",
+  },
 ];
 
 export function getProductBySlug(slug: string): Product | undefined {
