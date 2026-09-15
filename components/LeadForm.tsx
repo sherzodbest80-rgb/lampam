@@ -32,14 +32,11 @@ export default function LeadForm() {
   const searchParams = useSearchParams();
   const productFromUrl = searchParams.get("product") || "";
 
-  // Forma maydonlari — faqat ism va telefon
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-
-  // Qadam holati
-  const [step, setStep] = useState(1);
-
-  // Submit holati
+  const [roosters, setRoosters] = useState("");
+  const [problem, setProblem] = useState("");
+  const [interestedProduct, setInterestedProduct] = useState(productFromUrl);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -70,15 +67,6 @@ export default function LeadForm() {
     };
   }, []);
 
-  // Forma butun ekranni egallaydi — body scroll'ni to'xtatamiz
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, []);
-
-  // Telefon raqamini formatlash: +998 __ ___ __ __
   const formatPhone = (value: string): string => {
     const digits = value.replace(/\D/g, "");
     let formatted = "+998 ";
@@ -89,40 +77,26 @@ export default function LeadForm() {
     return formatted.trim();
   };
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPhone(formatPhone(e.target.value));
-  };
-
-  const goBack = () => {
-    setErrorMsg("");
-    if (step > 1) setStep(step - 1);
-  };
-
-  const goNext = () => {
-    setErrorMsg("");
-
-    if (step === 1) {
-      if (name.trim().length < 2) {
-        setErrorMsg("Iltimos, ismingizni kiriting");
-        return;
-      }
-      setStep(2);
-    }
-  };
-
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
     setErrorMsg("");
 
     const phoneDigits = phone.replace(/\D/g, "");
+
+    if (name.trim().length < 2) {
+      setStatus("error");
+      setErrorMsg("Iltimos, ismingizni kiriting");
+      return;
+    }
     if (phoneDigits.length < 12) {
+      setStatus("error");
       setErrorMsg("Iltimos, to'liq telefon raqamingizni kiriting");
       return;
     }
 
-    setStatus("loading");
-
     try {
-      // Submit paytida yana cookie o'qiymiz
+      // Submit paytida yana cookie o'qiymiz (cache bilan birga eng ishonchli qiymat)
       const { fbp: fbpNow, fbc: fbcNow } = getFbCookies();
       const finalFbp = fbpNow || cachedFbpRef.current || "";
       const finalFbc = fbcNow || cachedFbcRef.current || "";
@@ -140,7 +114,9 @@ export default function LeadForm() {
         body: JSON.stringify({
           name: name.trim(),
           phone: "+" + phoneDigits,
-          interestedProduct: productFromUrl,
+          roosters: roosters.trim(),
+          problem: problem.trim(),
+          interestedProduct: interestedProduct.trim(),
           source: "roost.uz",
           fbp: finalFbp,
           fbc: finalFbc,
@@ -151,153 +127,85 @@ export default function LeadForm() {
       });
 
       if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data.error || "Server xatosi");
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.error || "Xatolik yuz berdi");
       }
 
+      // Muvaffaqiyatli yuborildi — /thanks ga o'tkazamiz
       window.location.href = "/thanks";
-    } catch (error: any) {
+    } catch (err) {
       setStatus("error");
-      setErrorMsg(error.message || "Xatolik yuz berdi. Iltimos, qayta urinib ko'ring.");
+      setErrorMsg(err instanceof Error ? err.message : "Xatolik yuz berdi. Qaytadan urinib ko'ring");
     }
   };
 
-  const totalSteps = 2;
-  const progress = (step / totalSteps) * 100;
-
   return (
-    <div className="fixed inset-0 z-50 bg-white flex flex-col animate-fade-in">
-      {/* Header: back + progress */}
-      <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-100">
-        {step > 1 ? (
-          <button
-            onClick={goBack}
-            className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 active:bg-slate-200 text-slate-700 text-xl font-medium transition-colors"
-            aria-label="Orqaga"
-          >
-            ←
-          </button>
-        ) : (
-          <div className="w-10 h-10" aria-hidden="true" />
-        )}
+    <main className="px-5 py-10 pb-16 relative overflow-hidden min-h-screen flex items-center justify-center">
+      <div className="absolute -top-24 -right-24 w-[500px] h-[500px] rounded-full blur-3xl pointer-events-none animate-blob-move bg-[radial-gradient(circle,rgba(16,185,129,0.25)_0%,transparent_70%)]" />
+      <div className="absolute -bottom-52 -left-40 w-[600px] h-[600px] rounded-full blur-3xl pointer-events-none animate-blob-move bg-[radial-gradient(circle,rgba(255,255,255,0.08)_0%,transparent_70%)]" style={{ animationDelay: "-10s" }} />
 
-        {/* Progress bar */}
-        <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-blue-600 transition-all duration-300 ease-out"
-            style={{ width: `${progress}%` }}
-          />
+      <div className="w-full max-w-lg relative z-10">
+        <div className="text-center text-white mb-7">
+          <div className="inline-flex items-center gap-2 bg-lampam-green/20 text-lampam-green-light px-4 py-2 rounded-full text-xs font-bold tracking-wider mb-4 border border-lampam-green/40 backdrop-blur-sm">
+            <span className="w-1.5 h-1.5 bg-lampam-green-light rounded-full animate-pulse-dot" />
+            ASLI MAHSULOTLAR
+          </div>
+          <h1 className="font-display text-3xl md:text-4xl font-extrabold leading-tight mb-2.5 tracking-tight">
+            Xo&apos;rozingiz uchun <span className="bg-gradient-to-br from-lampam-green-light to-lampam-green bg-clip-text text-transparent">professional yechim</span>
+          </h1>
+          <p className="text-base opacity-90">Formani to&apos;ldiring, biz tez orada bog&apos;lanamiz</p>
         </div>
 
-        <div className="w-10 h-10" aria-hidden="true" />
-      </div>
-
-      {/* Body — qadamlar */}
-      <div className="flex-1 overflow-y-auto px-5 py-6">
-        <div className="max-w-md mx-auto">
-          <div className="text-xs text-slate-500 mb-3 font-semibold tracking-wide">
-            {step} / {totalSteps}
+        <div className="bg-white rounded-3xl p-8 shadow-2xl shadow-black/30">
+          <div className="text-center mb-6">
+            <div className="w-14 h-14 mx-auto mb-3.5 bg-gradient-to-br from-lampam-green to-emerald-600 rounded-2xl flex items-center justify-center text-2xl animate-pulse-phone">📋</div>
+            <h2 className="font-display text-xl text-lampam-navy font-extrabold mb-1.5 tracking-tight">Buyurtma berish</h2>
+            <p className="text-slate-500 text-sm">Bepul konsultatsiya oling</p>
           </div>
 
-          {/* QADAM 1: Ism */}
-          {step === 1 && (
-            <div className="animate-slide-in">
-              <h2 className="text-2xl font-bold mb-2 text-slate-900">Ismingizni kiriting</h2>
-              <p className="text-sm text-slate-600 mb-6">Sizga qanday murojaat qilishimiz mumkin?</p>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && goNext()}
-                placeholder="Masalan: Akmal"
-                autoFocus
-                className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3.5 text-base text-slate-900 placeholder:text-slate-400 placeholder:font-normal focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
-              />
+          <form onSubmit={handleSubmit}>
+            <div className="bg-gradient-to-br from-blue-50 to-sky-50 border-l-4 border-lampam-blue rounded-lg p-3 mb-5 flex gap-2.5 items-start">
+              <span className="text-lg flex-shrink-0">ℹ️</span>
+              <p className="text-lampam-navy text-xs leading-relaxed m-0">
+                Ushbu formani diqqat bilan to&apos;ldiring va menejerlarimiz siz bilan bog&apos;lanib ma&apos;lumot berishadi
+              </p>
             </div>
-          )}
 
-          {/* QADAM 2: Telefon + IIB ogohlantirish */}
-          {step === 2 && (
-            <div className="animate-slide-in">
-              <h2 className="text-2xl font-bold mb-2 text-slate-900">Telefon raqamingiz</h2>
-              <p className="text-sm text-slate-600 mb-6">Biz siz bilan tez orada bog&apos;lanamiz</p>
-              <input
-                type="tel"
-                inputMode="numeric"
-                value={phone}
-                onChange={handlePhoneChange}
-                onFocus={() => !phone && setPhone("+998 ")}
-                onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-                placeholder="+998 __ ___ __ __"
-                autoFocus
-                className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3.5 text-base text-slate-900 placeholder:text-slate-400 placeholder:font-normal focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
-              />
-
-              {/* IIB ogohlantirish */}
-              <div className="mt-4 flex items-start gap-2.5 bg-amber-50 border border-amber-200 rounded-lg p-3">
-                <img
-                  src="/iib-logo.jpg"
-                  alt="O'zbekiston Respublikasi Ichki ishlar vazirligi"
-                  className="w-10 h-10 flex-shrink-0 object-contain mt-0.5"
-                />
-                <p className="text-xs leading-snug text-amber-900 m-0">
-                  <span className="font-semibold">Diqqat!</span> Boshqa shaxsning
-                  telefon raqamini uning roziligisiz kiritish{" "}
-                  <span className="font-semibold">MJtK 183-moddasiga</span> ko&apos;ra
-                  javobgarlikka sabab bo&apos;ladi. Iltimos, faqat o&apos;z
-                  raqamingizni yozing.
-                </p>
-              </div>
+            <div className="mb-4">
+              <label className="block text-sm font-bold text-lampam-navy mb-2">Ismingiz</label>
+              <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Masalan: Akmal" disabled={status === "loading"} required className="w-full px-4 py-3.5 border-2 border-slate-200 rounded-xl text-sm bg-slate-50 text-slate-800 focus:outline-none focus:border-lampam-blue focus:bg-white focus:ring-4 focus:ring-lampam-blue/10 transition-all disabled:opacity-60" />
             </div>
-          )}
 
-          {/* Xato xabari */}
-          {errorMsg && (
-            <div className="text-sm text-red-700 bg-red-50 border border-red-200 px-4 py-3 rounded-lg mt-4 font-medium">
-              {errorMsg}
+            <div className="mb-4">
+              <label className="block text-sm font-bold text-lampam-navy mb-2">Telefon raqamingiz</label>
+              <input type="tel" value={phone} onChange={(e) => setPhone(formatPhone(e.target.value))} onFocus={() => !phone && setPhone("+998 ")} placeholder="+998 __ ___ __ __" disabled={status === "loading"} required className="w-full px-4 py-3.5 border-2 border-slate-200 rounded-xl text-sm bg-slate-50 text-slate-800 focus:outline-none focus:border-lampam-blue focus:bg-white focus:ring-4 focus:ring-lampam-blue/10 transition-all disabled:opacity-60" />
             </div>
-          )}
-        </div>
-      </div>
 
-      {/* Footer: tugma */}
-      <div className="px-5 py-4 border-t border-slate-100 bg-white">
-        <div className="max-w-md mx-auto">
-          {step < totalSteps ? (
-            <button
-              onClick={goNext}
-              className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white py-3.5 rounded-xl text-base font-semibold transition-colors"
-            >
-              Keyingisi →
-            </button>
-          ) : (
-            <button
-              onClick={handleSubmit}
-              disabled={status === "loading"}
-              className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white py-3.5 rounded-xl text-base font-semibold transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-            >
+            <div className="mb-4">
+              <label className="block text-sm font-bold text-lampam-navy mb-2">Nechta xo&apos;rozlaringiz bor?</label>
+              <input type="text" value={roosters} onChange={(e) => setRoosters(e.target.value)} placeholder="Masalan: 5 ta, 20 ga yaqin, ko'p" disabled={status === "loading"} className="w-full px-4 py-3.5 border-2 border-slate-200 rounded-xl text-sm bg-slate-50 text-slate-800 focus:outline-none focus:border-lampam-blue focus:bg-white focus:ring-4 focus:ring-lampam-blue/10 transition-all disabled:opacity-60" />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-bold text-lampam-navy mb-2">Nima muammo sizni qiynayapdi?</label>
+              <textarea value={problem} onChange={(e) => setProblem(e.target.value)} placeholder="Xo'rozingizning muammosini qisqacha yozing..." disabled={status === "loading"} className="w-full px-4 py-3.5 border-2 border-slate-200 rounded-xl text-sm bg-slate-50 text-slate-800 focus:outline-none focus:border-lampam-blue focus:bg-white focus:ring-4 focus:ring-lampam-blue/10 transition-all disabled:opacity-60 min-h-[80px] resize-y leading-relaxed" />
+            </div>
+
+            <div className="mb-5">
+              <label className="block text-sm font-bold text-lampam-navy mb-2">Qaysi mahsulotimiz qiziq bo&apos;ldi?</label>
+              <input type="text" value={interestedProduct} onChange={(e) => setInterestedProduct(e.target.value)} placeholder="Masalan: MAX C 21, ABD 292 yoki bilmayman" disabled={status === "loading"} className="w-full px-4 py-3.5 border-2 border-slate-200 rounded-xl text-sm bg-slate-50 text-slate-800 focus:outline-none focus:border-lampam-blue focus:bg-white focus:ring-4 focus:ring-lampam-blue/10 transition-all disabled:opacity-60" />
+            </div>
+
+            {status === "error" && errorMsg && (
+              <div className="text-sm text-red-600 bg-red-50 px-4 py-2.5 rounded-lg mb-4">{errorMsg}</div>
+            )}
+
+            <button type="submit" disabled={status === "loading"} className="w-full bg-gradient-to-br from-lampam-blue to-lampam-navy text-white py-4 rounded-2xl font-bold text-base hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-lampam-blue/40 transition-all disabled:opacity-60">
               {status === "loading" ? "Yuborilmoqda..." : "So'rov yuborish →"}
             </button>
-          )}
+          </form>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes fade-in {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.25s ease-out;
-        }
-        @keyframes slide-in {
-          from { opacity: 0; transform: translateX(20px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        .animate-slide-in {
-          animation: slide-in 0.3s ease-out;
-        }
-      `}</style>
-    </div>
+    </main>
   );
 }
