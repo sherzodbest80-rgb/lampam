@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import MetaPixel from "../components/MetaPixel";
+import AttributionCapture from "../components/AttributionCapture";
 
 export const metadata: Metadata = {
   title: "ROOST Uzbekistan - Xo'roz vitaminlari",
@@ -16,6 +17,7 @@ export default function RootLayout({
     <html lang="uz">
       <body>
         <MetaPixel />
+        <AttributionCapture />
         {children}
       </body>
     </html>

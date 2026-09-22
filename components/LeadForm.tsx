@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
+import { isValidUzMobile, PHONE_ERROR, prettyPhone } from "@/lib/phone";
 
 // YORDAMCHI: Cookie'lardan fbp va fbc ni o'qish
 function getFbCookies(): { fbp: string; fbc: string } {
@@ -28,6 +29,43 @@ function getFbCookies(): { fbp: string; fbc: string } {
   return { fbp, fbc };
 }
 
+// Qurilma ID: localStorage + cookie (bittasi tozalansa ikkinchisidan tiklanadi)
+function getDeviceId(): string {
+  try {
+    const fromCookie = document.cookie.match(/(?:^|;\s*)roost_did=([^;]+)/)?.[1] || "";
+    let id = localStorage.getItem("roost_did") || fromCookie;
+    if (!id) {
+      id = typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
+    }
+    localStorage.setItem("roost_did", id);
+    document.cookie = `roost_did=${id}; path=/; max-age=31536000; SameSite=Lax`;
+    return id;
+  } catch {
+    return "";
+  }
+}
+
+// Kirish manbasi: utm_*, fbclid, referrer — sessiyadagi birinchi sahifadan
+function getAttribution(): { utm: Record<string, string>; fbclid: boolean; referrer: string; landingUrl: string } {
+  const current = new URLSearchParams(window.location.search);
+  const utmNow: Record<string, string> = {};
+  current.forEach((v, k) => {
+    if (k.startsWith("utm_") && v) utmNow[k] = v;
+  });
+  let saved: any = null;
+  try {
+    saved = JSON.parse(sessionStorage.getItem("roost_attr") || "null");
+  } catch {}
+  return {
+    utm: Object.keys(utmNow).length ? utmNow : saved?.utm || {},
+    fbclid: current.has("fbclid") || !!saved?.fbclid,
+    referrer: saved?.referrer ?? document.referrer,
+    landingUrl: saved?.landingUrl || window.location.href,
+  };
+}
+
 export default function LeadForm() {
   const searchParams = useSearchParams();
   const productFromUrl = searchParams.get("product") || "";
@@ -39,6 +77,12 @@ export default function LeadForm() {
   const [interestedProduct, setInterestedProduct] = useState(productFromUrl);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [website, setWebsite] = useState(""); // honeypot — odamga ko'rinmaydi
+
+  const mountedAtRef = useRef<number>(Date.now());
+  const elapsedRef = useRef<number>(0);
+  const deviceIdRef = useRef<string>("");
 
   // fbp/fbc ni oldindan ushlab qo'yish uchun ref
   const cachedFbpRef = useRef<string>("");
@@ -55,6 +99,8 @@ export default function LeadForm() {
     };
 
     tryCapture();
+    mountedAtRef.current = Date.now();
+    deviceIdRef.current = getDeviceId();
 
     const timer1 = setTimeout(tryCapture, 500);
     const timer2 = setTimeout(tryCapture, 1500);
@@ -77,23 +123,34 @@ export default function LeadForm() {
     return formatted.trim();
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // 1-bosqich: tekshiramiz va "Raqamingiz to'g'rimi?" oynasini ochamiz
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus("loading");
     setErrorMsg("");
-
-    const phoneDigits = phone.replace(/\D/g, "");
 
     if (name.trim().length < 2) {
       setStatus("error");
       setErrorMsg("Iltimos, ismingizni kiriting");
       return;
     }
-    if (phoneDigits.length < 12) {
+    if (!isValidUzMobile(phone)) {
       setStatus("error");
-      setErrorMsg("Iltimos, to'liq telefon raqamingizni kiriting");
+      setErrorMsg(PHONE_ERROR);
       return;
     }
+
+    elapsedRef.current = Date.now() - mountedAtRef.current;
+    setStatus("idle");
+    setConfirmOpen(true);
+  };
+
+  // 2-bosqich: mijoz raqamni tasdiqladi — yuboramiz
+  const sendLead = async () => {
+    setConfirmOpen(false);
+    setStatus("loading");
+    setErrorMsg("");
+
+    const phoneDigits = phone.replace(/\D/g, "");
 
     try {
       // Submit paytida yana cookie o'qiymiz (cache bilan birga eng ishonchli qiymat)
@@ -102,11 +159,6 @@ export default function LeadForm() {
       const finalFbc = fbcNow || cachedFbcRef.current || "";
 
       const eventId = `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
-
-      // Pixel'ga Lead eventi (server CAPI bilan bir xil event_id — deduplikatsiya)
-      if (typeof window !== "undefined" && (window as any).fbq) {
-        (window as any).fbq("track", "Lead", {}, { eventID: eventId });
-      }
 
       const response = await fetch("/api/lead", {
         method: "POST",
@@ -123,12 +175,23 @@ export default function LeadForm() {
           userAgent: navigator.userAgent,
           pageUrl: window.location.href,
           event_id: eventId,
+          deviceId: deviceIdRef.current,
+          website,
+          elapsedMs: elapsedRef.current,
+          attribution: getAttribution(),
         }),
       });
 
+      const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        throw new Error(errData.error || "Xatolik yuz berdi");
+        throw new Error(data.error || "Xatolik yuz berdi");
+      }
+
+      // Pixel'ga Lead eventi faqat server "haqiqiy lid" desa (shubhali/takroriy emas).
+      // Server CAPI bilan bir xil event_id — deduplikatsiya.
+      if (data.track && typeof window !== "undefined" && (window as any).fbq) {
+        (window as any).fbq("track", "Lead", {}, { eventID: eventId });
+        await new Promise((r) => setTimeout(r, 300)); // pixel so'rovi ketib ulgursin
       }
 
       // Muvaffaqiyatli yuborildi — /thanks ga o'tkazamiz
@@ -163,7 +226,15 @@ export default function LeadForm() {
             <p className="text-slate-500 text-sm">Bepul konsultatsiya oling</p>
           </div>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} noValidate>
+            {/* Honeypot: odam ko'rmaydi, bot to'ldiradi */}
+            <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", top: "auto", width: 1, height: 1, overflow: "hidden" }}>
+              <label>
+                Veb-sayt
+                <input type="text" name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
+              </label>
+            </div>
+
             <div className="bg-gradient-to-br from-blue-50 to-sky-50 border-l-4 border-lampam-blue rounded-lg p-3 mb-5 flex gap-2.5 items-start">
               <span className="text-lg flex-shrink-0">ℹ️</span>
               <p className="text-lampam-navy text-xs leading-relaxed m-0">
@@ -206,6 +277,23 @@ export default function LeadForm() {
           </form>
         </div>
       </div>
+
+      {confirmOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-5" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+          <div className="w-full max-w-sm bg-white rounded-3xl p-7 shadow-2xl text-center">
+            <h3 id="confirm-title" className="font-display text-xl text-lampam-navy font-extrabold mb-4 tracking-tight">Raqamingiz to&apos;g&apos;rimi?</h3>
+            <div className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-wide mb-6 whitespace-nowrap">{prettyPhone(phone)}</div>
+            <div className="flex gap-3">
+              <button type="button" onClick={() => setConfirmOpen(false)} className="flex-1 py-3.5 rounded-2xl font-bold text-base border-2 border-slate-200 text-lampam-navy bg-white hover:bg-slate-50 transition-all">
+                O&apos;zgartirish
+              </button>
+              <button type="button" onClick={sendLead} autoFocus className="flex-1 py-3.5 rounded-2xl font-bold text-base text-white bg-gradient-to-br from-lampam-green to-emerald-600 hover:-translate-y-0.5 transition-all">
+                To&apos;g&apos;ri
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
