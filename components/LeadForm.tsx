@@ -114,7 +114,11 @@ export default function LeadForm() {
   }, []);
 
   const formatPhone = (value: string): string => {
-    const digits = value.replace(/\D/g, "");
+    let digits = value.replace(/\D/g, "");
+    // Avtoto'ldirish/qo'yish "+998 " ustiga to'liq raqam qo'shsa, 998 ikki marta bo'lib qoladi
+    if (digits.startsWith("998998") && digits.length > 12) digits = digits.slice(3);
+    // "901234567" ko'rinishida qo'yilgan raqam
+    else if (digits.length === 9 && !digits.startsWith("998")) digits = "998" + digits;
     let formatted = "+998 ";
     if (digits.length > 3) formatted += digits.slice(3, 5);
     if (digits.length > 5) formatted += " " + digits.slice(5, 8);
