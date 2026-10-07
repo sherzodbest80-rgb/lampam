@@ -29,9 +29,9 @@ export default function ThanksPage() {
 
         <div>
           <span className="block text-xs text-slate-500 uppercase tracking-widest font-bold mb-3">Menejer bilan bog'lanish</span>
-          <a href="tel:+998998477349" className="flex items-center justify-center gap-3 bg-gradient-to-br from-lampam-green to-emerald-600 text-white py-4 px-7 rounded-2xl font-bold text-lg no-underline animate-pulse-phone hover:-translate-y-0.5 hover:scale-[1.02] transition-all">
+          <a href="tel:+998942295313" className="flex items-center justify-center gap-3 bg-gradient-to-br from-lampam-green to-emerald-600 text-white py-4 px-7 rounded-2xl font-bold text-lg no-underline animate-pulse-phone hover:-translate-y-0.5 hover:scale-[1.02] transition-all">
             <span className="text-xl animate-shake">📞</span>
-            <span className="font-display tracking-wide">+998 99 847 73 49</span>
+            <span className="font-display tracking-wide">+998 94 229 53 13</span>
           </a>
         </div>
       </div>
