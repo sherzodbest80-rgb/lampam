@@ -64,6 +64,18 @@ export async function POST(req: Request) {
     commentParts.push(`🔗 Manba: ${source || "roost.uz"}`);
     const comment = commentParts.join("\n");
 
+    // 0-QADAM: Roost CRM (roost-crm.vercel.app) — xato bo'lsa ham asosiy oqim to'xtamaydi
+    try {
+      await sendToRoostCRM({
+        name: name.trim(),
+        phone: phone.trim(),
+        product: interestedProduct || "",
+        note: comment,
+      });
+    } catch (crmErr: any) {
+      console.error("[ROOST CRM XATO]", crmErr.message);
+    }
+
     // 1-QADAM: amoCRM
     let amoResult: any = null;
     try {
@@ -127,6 +139,26 @@ export async function POST(req: Request) {
   } catch (err: any) {
     console.error("[LEAD API ERROR]", err);
     return NextResponse.json({ error: err.message || "Server xatosi" }, { status: 500 });
+  }
+}
+
+// ---------------- Roost CRM ----------------
+async function sendToRoostCRM(data: { name: string; phone: string; product: string; note: string }) {
+  const URL = process.env.ROOST_CRM_URL?.trim();
+  const KEY = process.env.ROOST_CRM_KEY?.trim();
+  if (!URL || !KEY) return { skipped: true };
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 5000);
+  try {
+    const res = await fetch(`${URL}/api/ingest`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-api-key": KEY },
+      body: JSON.stringify({ ...data, source: "Sayt" }),
+      signal: ctrl.signal,
+    });
+    return await res.json();
+  } finally {
+    clearTimeout(timer);
   }
 }
 
